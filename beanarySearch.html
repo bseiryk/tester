@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+
+        class Node {
+            constructor(value) {
+                this.value = value;
+                this.left = null;
+                this.right = null;
+            }
+        }
+
+        class BST {
+            constructor(props) {
+                this.root = null;
+            }
+            insert(val) {
+                const newVal = new Node(val);
+                if (!this.root) {
+                    this.root = newVal;
+                    return this;
+                }
+
+                let current = this.root;
+                while (true) {
+                    if (val > current.value) {
+                        if (!current.right) {
+                            current.right = newVal;
+                            return this
+                        }
+                        current = current.right;
+                    } else if (val < current.value) {
+                        if (!current.left) {
+                            current.left = newVal;
+                            return this;
+                        }
+                        current = current.left;
+                    } else {
+                        return false;
+                    }
+                }
+            }
+            find(val) {
+                if (!this.root) return null;
+
+                let current = this.root;
+                while (true) {
+                    if (val > current.value) {
+                        if (!current.right) {
+                            return null;
+                        }
+                        current = current.right;
+                    } else if (val < current.value) {
+                        if (!current.left) {
+                            return null;
+                        }
+                        current = current.left;
+                    } else {
+                        return current;
+                    }
+                }
+            }
+            bfs() {
+                let node = this.root,
+                    queue = [],
+                    data = [];
+                queue.push(node);
+                while (queue.length) {
+                    node = queue.shift();
+                    data.push(node);
+                    if (node.left) queue.push(node.left);
+                    if (node.right) queue.push(node.right);
+                }
+                return data;
+
+            }
+            dfsPreOrder() {
+                const visited = [];
+                const current = this.root;
+                function add(node) {
+                    visited.push(node);
+                    if (node.left) add(node.left);
+                    if (node.right) add(node.right);
+                }
+                add(current);
+                return visited;
+            }
+            dfsPostOrder() {
+                const visited = [];
+                const current = this.root;
+                function add(node) {
+                    if (node.left) add(node.left);
+                    if (node.right) add(node.right);
+                    visited.push(node);
+                }
+                add(current);
+                return visited;
+            }
+            dfsInOrder() {
+                const visited = [];
+                const current = this.root;
+                function add(node) {
+                    if (node.left) add(node.left);
+                    visited.push(node);
+                    if (node.right) add(node.right);
+                }
+                add(current);
+                return visited;
+            }
+        }
+
+        const list = new BST();
+        list.insert(42);
+        list.insert(65);
+        list.insert(34);
+        list.insert(55);
+        list.insert(46);
+        list.insert(47);
+        list.insert(57);
+        list.insert(67);
+        list.insert(43);
+
+    //     42
+    //  34      65
+    //         55  67
+    //       46   57
+    //      43 47 
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        class MaxBinaryHeaps {
+            constructor() {
+                this.data = [41, 39, 33, 18, 27, 12]
+            }
+            push(val) {
+                this.data.push(val);
+                const data = this.data;
+                if (data.length === 1) {
+                    return data;
+                }
+                let parentIndex = Math.floor((data.length - 2) / 2);
+                let valIdx = data.length - 1;
+
+                while (true) {
+                    if (data[parentIndex] <= val) {
+                        const temp = data[parentIndex];
+                        data[parentIndex] = val;
+                        data[valIdx] = temp;
+                        valIdx = parentIndex;
+                        parentIndex = Math.floor((parentIndex - 1) / 2);
+                    } else return this;
+                }
+
+            }
+            remove() {
+                const max = this.data[0];
+                const end = this.data.pop();
+                if (this.data.length) {
+                    this.data[0] = end;
+                    this.sinkDown();
+                }
+                return max;
+            }
+            sinkDown() {
+                let idx = 0;
+                const length = this.data.length;
+                const element = this.data[0];
+                while (true) {
+                    let leftChildIdx = 2 * idx + 1;
+                    let rightChildIdx = 2 * idx + 2;
+                    let leftChild, rightChild;
+                    let swap = null;
+                    if (leftChildIdx < length) {
+                        leftChild = this.data[leftChildIdx];
+                        if (leftChild > element) {
+                            swap = leftChildIdx;
+                        }
+                    }
+                    if (rightChildIdx < length) {
+                        rightChild = this.data[rightChildIdx];
+                        if ((swap === null && rightChild > element) || (swap !== null && rightChild > leftChild)) {
+                            swap = rightChildIdx;
+                        }
+                    }
+                    if (!swap) break;
+                    this.data[idx] = this.data[swap];
+                    this.data[swap] = element;
+                }
+
+
+            }
+        }
+
+        const list = new MaxBinaryHeaps();
+        list.push(55)
+
+    </script>
+</body>
+
+</html>

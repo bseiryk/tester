@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        class Graph {
+            constructor() {
+                this.graph = {};
+            }
+            addVertex(vertex) {
+                if (!this.graph[vertex]) this.graph[vertex] = [];
+            }
+            addEdge(v1, v2, weight) {
+                if (this.graph[v1]) this.graph[v1].push({node: v2, weight});
+                if (this.graph[v2]) this.graph[v2].push({node: v1, weight});
+            }
+
+
+
+
+            removeEdge(v1, v2) {
+                if (this.graph[v1]) {
+                    this.graph[v1] = this.graph[v1].filter(el => {
+                        return el !== v2;
+                    })
+                };
+                if (this.graph[v2]) {
+                    this.graph[v2] = this.graph[v2].filter(el => {
+                        return el !== v1;
+                    })
+                };
+            }
+            removeVertex(v) {
+                while (this.graph[v].length) {
+                    const vertex = this.graph[v].pop();
+                    if (this.graph[vertex]) this.graph[vertex] = this.graph[vertex].filter(el => el !== v);
+                }
+            }
+        }
+
+        const list = new Graph();
+        list.addVertex('A');
+        list.addVertex('B');
+        list.addVertex('C');
+
+        list.addEdge('A', 'B', 5);
+        list.addEdge('A', 'C', 9);
+        list.addEdge('B', 'C', 7);
+
+    </script>
+</body>
+
+</html>

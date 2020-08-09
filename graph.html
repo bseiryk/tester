@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        class Graph {
+            constructor() {
+                this.graph = {};
+            }
+            addVertex(vertex) {
+                if (!this.graph[vertex]) this.graph[vertex] = [];
+            }
+            addEdge(v1, v2) {
+                if (this.graph[v1]) this.graph[v1].push(v2);
+                if (this.graph[v2]) this.graph[v2].push(v1);
+            }
+            removeEdge(v1, v2) {
+                if (this.graph[v1]) {
+                    this.graph[v1] = this.graph[v1].filter(el => {
+                        return el !== v2;
+                    })
+                };
+                if (this.graph[v2]) {
+                    this.graph[v2] = this.graph[v2].filter(el => {
+                        return el !== v1;
+                    })
+                };
+            }
+            removeVertex(v) {
+                while (this.graph[v].length) {
+                    const vertex = this.graph[v].pop();
+                    if (this.graph[vertex]) this.graph[vertex] = this.graph[vertex].filter(el => el !== v);
+                }
+            }
+            dfs(start) {
+                const result = [];
+                const visited = {};
+                const graph = this.graph;
+                (function dfsHelper(vertex) {
+                    if (!vertex) return null;
+                    visited[vertex] = true;
+                    result.push(vertex);
+                    graph[vertex].forEach(element => {
+                        if (!visited[element]) {
+                            dfsHelper(element);
+                        }
+                    });
+                })(start);
+                return result
+            }
+        }
+
+        const list = new Graph();
+        list.addVertex('A');
+        list.addVertex('B');
+        list.addVertex('C');
+        list.addVertex('D');
+        list.addVertex('E');
+        list.addVertex('F');
+
+        list.addEdge('A', 'B');
+        list.addEdge('A', 'C');
+        list.addEdge('B', 'D');
+        list.addEdge('C', 'E');
+        list.addEdge('D', 'E');
+        list.addEdge('D', 'F');
+        list.addEdge('E', 'F');
+
+    </script>
+</body>
+
+</html>

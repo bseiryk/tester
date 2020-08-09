@@ -1,0 +1,23 @@
+.greed :nth-child(even) {
+  background: rgb(2, 36, 63);
+  border-radius: 4px;
+  color: rgb(192, 192, 192);
+  padding: 20px;
+}
+.greed :nth-child(odd) {
+  background: rgb(3, 76, 136);
+  border-radius: 4px;
+  color: rgb(192, 192, 192);
+  padding: 20px;
+}
+/* .greed :nth-child(1) {
+  grid-area: 2 / 1 / 4 / -1
+
+} */
+
+.greed {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: 100px 1fr 100px;
+  grid-gap: 10px;
+}
