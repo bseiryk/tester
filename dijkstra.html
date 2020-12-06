@@ -10,50 +10,102 @@
 
 <body>
     <script>
-        class Graph {
-            constructor() {
-                this.graph = {};
-            }
-            addVertex(vertex) {
-                if (!this.graph[vertex]) this.graph[vertex] = [];
-            }
-            addEdge(v1, v2, weight) {
-                if (this.graph[v1]) this.graph[v1].push({node: v2, weight});
-                if (this.graph[v2]) this.graph[v2].push({node: v1, weight});
-            }
+        const graph = {
+            root: {
+                childs: {
+                    a: 5,
+                    b: 2,
+                },
+                name: 'root',
+                cost: 0,
+                parent: null,
+            },
+            a: {
+                childs: {
+                    c: 4,
+                    d: 2,
+                },
+                name: 'a',
+                cost: Infinity,
+            },
+            b: {
+                childs: {
+                    a: 8,
+                    d: 7,
+                },
+                name: 'b',
+                cost: Infinity,
+            },
+            c: {
+                childs: {
+                    end: 3,
+                    d: 6,
+                },
+                name: 'c',
+                cost: Infinity,
+            },
+            d: {
+                childs: {
+                    end: 1,
+                },
+                name: 'd',
+                cost: Infinity,
+            },
+            end: {
+                childs: {},
+                name: 'end',
+                cost: Infinity,
+            },
+        }
 
 
+        const getLowest = (data, visitedItems) => {
+            let lowest = null
+            const newItems = []
 
-
-            removeEdge(v1, v2) {
-                if (this.graph[v1]) {
-                    this.graph[v1] = this.graph[v1].filter(el => {
-                        return el !== v2;
-                    })
-                };
-                if (this.graph[v2]) {
-                    this.graph[v2] = this.graph[v2].filter(el => {
-                        return el !== v1;
-                    })
-                };
-            }
-            removeVertex(v) {
-                while (this.graph[v].length) {
-                    const vertex = this.graph[v].pop();
-                    if (this.graph[vertex]) this.graph[vertex] = this.graph[vertex].filter(el => el !== v);
-                }
+            data.forEach((el) => {
+                if (!visitedItems.has(el.name)) {
+                    newItems.push(el)
+                    if (!lowest || el.cost < lowest.cost) lowest = el
+                } 
+            })
+            return {
+                lowest,
+                newItems,
             }
         }
 
-        const list = new Graph();
-        list.addVertex('A');
-        list.addVertex('B');
-        list.addVertex('C');
+        const getEndData = (graph) => {
+            const visitedItems = new Set();
+            const addedToQueueItems = new Set();
+            let items = [graph.root]
+            let { lowest: node, newItems } = getLowest(items, visitedItems)
+            items = newItems
+            addedToQueueItems.add(node.name)
 
-        list.addEdge('A', 'B', 5);
-        list.addEdge('A', 'C', 9);
-        list.addEdge('B', 'C', 7);
+            while (node) {
+                visitedItems.add(node.name);
+                Object.entries(node.childs).forEach(([key, cost]) => {
+                    const newCost = node.cost + cost;
+                    if (newCost < graph[key].cost) {
+                        graph[key].cost = newCost
+                        graph[key].parent = node.name
+                    }
+                    if (!addedToQueueItems.has(key)) {
+                        items.push(graph[key])
+                        addedToQueueItems.add(key)
+                    }
+                });
 
+                const { lowest, newItems } = getLowest(items, visitedItems)
+                node = lowest
+                items = newItems
+            }
+            return graph
+        }
+
+        const updatedWithCost = getEndData(graph);
+        console.log(updatedWithCost);
     </script>
 </body>
 

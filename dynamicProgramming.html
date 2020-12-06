@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+      const main = 'slues'
+      const typed = 'cluedsluesd'
+
+
+      function getMatrix (mainStr, searchStr) {
+        const mainStrArr = mainStr.split('');
+        const searchStrArr = searchStr.split('');
+        const rows = [];
+        let wordIdx = 0
+        let biggestMatchCount= 0
+
+        searchStrArr.forEach((t, sidx) => {
+          if (!rows[sidx]) rows[sidx] = [];
+          const row = rows[sidx];
+
+          mainStrArr.forEach((m, midx) => {
+            if(t === m) {
+              const matchCount = sidx && midx ? rows[sidx - 1][midx - 1] + 1 : 1;
+              if (matchCount > biggestMatchCount) {
+                wordIdx = sidx;
+                biggestMatchCount = matchCount
+              }
+              row[midx] = matchCount
+            } else row[midx] = 0
+          })
+        })
+        console.log(rows)
+        const result = biggestMatchCount
+          ? searchStr.slice((wordIdx - biggestMatchCount) + 1, wordIdx + 1)
+          : null;
+
+        return result;
+      }
+
+      console.log(getMatrix(main, typed))
+    </script>
+</body>
+
+</html>
