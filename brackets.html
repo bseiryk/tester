@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      function check(string, config) {
+        const { open, close } = config.reduce(
+          (acc, el) => {
+            acc.open[el[0]] = el[1];
+            acc.close[el[1]] = el[0];
+            return acc;
+          },
+          {
+            open: {},
+            close: {},
+          }
+        );
+
+        let stack = [];
+        let valid = true;
+
+        string.split("").forEach((char, idx) => {
+          if (!valid) return;
+          if (!stack.length && close[char] && close[char] !== char) {
+            valid = false;
+            return;
+          }
+
+          if (char === stack[stack.length - 1] && open[char] === char) {
+            stack.pop();
+            return;
+          }
+
+          if (open[char]) {
+            stack.push(char);
+          } else if (close[char]) {
+            const opened = stack.pop();
+
+            valid = close[char] === opened;
+          }
+        });
+        return !stack.length ? valid : false;
+      }
+
+      console.log(
+        check("||", [
+          ["(", ")"],
+          ["|", "|"],
+        ])
+      );
+
+      console.log(
+        check("|()|", [
+          ["(", ")"],
+          ["|", "|"],
+        ])
+      );
+
+      console.log(
+        check("|(|)", [
+          ["(", ")"],
+          ["|", "|"],
+        ])
+      );
+
+      console.log(
+        check("|()|(||)||", [
+          ["(", ")"],
+          ["|", "|"],
+        ])
+      );
+
+      console.log(
+        check("|(||||(||)||)|", [
+          ["(", ")"],
+          ["|", "|"],
+        ])
+      );
+    </script>
+  </body>
+</html>

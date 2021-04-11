@@ -1,34 +1,133 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-</head>
-<body>
-  <script>
-    const s = (Array.from(Array(1000))).map((el, idx) => idx)
-    // console.log(s)
-    const fn = () => {
-      console.log('idl')
-    }
-    
-    window.requestIdleCallback(fn)
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      const s = Array.from(Array(1000)).map((el, idx) => idx);
+      // console.log(s)
+      const fn = () => {
+        console.log("idl");
+      };
 
-    const ss = (Array.from(Array(1000))).map((el, idx) => idx)
-    // console.log(ss)
-    setTimeout(() => {
-      console.log('timeoutt')
-      setTimeout(() => {
-      console.log('timeout')
-      setTimeout(() => {
-      console.log('timeout')
-      setTimeout(() => {
-      console.log('timeout')
-    }, 0)
-    }, 0)
-    }, 0)
-    }, 0)
-  </script>
-</body>
+      // window.requestIdleCallback(fn);
+
+      // const ss = Array.from(Array(1000)).map((el, idx) => idx);
+      // // console.log(ss)
+      // setTimeout(() => {
+      //   console.log("timeoutt");
+      //   setTimeout(() => {
+      //     console.log("timeout");
+      //     setTimeout(() => {
+      //       console.log("timeout");
+      //       setTimeout(() => {
+      //         console.log("timeout");
+      //       }, 0);
+      //     }, 0);
+      //   }, 0);
+      // }, 0);
+
+      // class EventEmmiter {
+      //   constructor() {
+      //     this.lastCounter = 1;
+      //     this.events = {};
+      //     this.eventNameById = {};
+      //     this.eventCallbackById = {};
+      //   }
+
+      //   subscribe(event, eventCallback) {
+      //     const id = ++this.lastCounter;
+      //     this.lastCounter = id;
+
+      //     this.events[event] = this.events[event] || [];
+      //     this.events[event].push(eventCallback);
+
+      //     this.eventCallbackById[id] = eventCallback;
+      //     this.eventNameById[id] = event;
+
+      //     return id;
+      //   }
+
+      //   unsubscribe(subscriberId) {
+      //     const callback = this.eventCallbackById[subscriberId];
+      //     const name = this.eventNameById[subscriberId];
+
+      //     if (!name || !callback) return;
+
+      //     this.events[name] = this.events[name].filter((cb) => cb !== callback);
+
+      //     delete this.eventCallbackById[subscriberId];
+      //     delete this.eventNameById[subscriberId];
+      //   }
+
+      //   emmit(event, data) {
+      //     if (!this.events[event]) return;
+
+      //     this.events[event].forEach((callback) => callback(data));
+      //   }
+      // }
+      class EventEmmiter {
+        constructor() {
+          if (EventEmmiter.self) {
+            return EventEmmiter.self;
+          }
+
+          this.lastCounter = 1;
+          this.events = {};
+          this.eventNameById = {};
+          this.eventCallbackById = {};
+
+          EventEmmiter.self = this;
+        }
+
+        subscribe(event, eventCallback) {
+          const id = ++this.lastCounter;
+          this.lastCounter = id;
+
+          this.events[event] = this.events[event] || [];
+          this.events[event].push(eventCallback);
+
+          this.eventCallbackById[id] = eventCallback;
+          this.eventNameById[id] = event;
+
+          return id;
+        }
+
+        unsubscribe(subscriberId) {
+          const callback = this.eventCallbackById[subscriberId];
+          const name = this.eventNameById[subscriberId];
+
+          if (!name || !callback) return;
+
+          this.events[name] = this.events[name].filter((cb) => cb !== callback);
+
+          delete this.eventCallbackById[subscriberId];
+          delete this.eventNameById[subscriberId];
+        }
+
+        emmit(event, data) {
+          if (!this.events[event]) return;
+
+          this.events[event].forEach((callback) => callback(data));
+        }
+      }
+
+      const emmiter = new EventEmmiter();
+      const emmiter2 = new EventEmmiter();
+
+      emmiter.subscribe("event-1", (data) =>
+        console.log("The 1st subscriber received: ", data)
+      );
+      const id = emmiter2.subscribe("event-1", (data) => {
+        console.log("The 2nd subscriber received: ", data);
+        // emmiter.unsubscribe(id);
+      });
+
+      emmiter.emmit("event-1", "Wonderful world");
+      // emmiter.emmit("event-1", "Welcome to hell");
+    </script>
+  </body>
 </html>

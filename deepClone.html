@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      const cloneDeep = (obj) => {
+        let newObj = { ...obj };
+        let stack = [newObj];
+
+        while (stack.length) {
+          const item = stack.pop();
+          Object.entries(item).forEach((el) => {
+            if (typeof el[1] === "string") {
+              item[el[0]] = el[1];
+            } else if (Array.isArray(el[1])) {
+              const copied = el[1].map((el) => ({ ...el }));
+              item[el[0]] = copied;
+              stack = [...copied, ...stack];
+            } else {
+              const copied = { ...el[1] };
+              item[el[0]] = copied;
+              stack.unshift(copied);
+            }
+          });
+        }
+        return newObj;
+      };
+
+      const forClone = {
+        name: "peter",
+        arr: [
+          {
+            mather1: "julua",
+            father1: "david",
+            grand1: {
+              grandMa1: "sofia",
+              grandPa1: "Nik",
+            },
+          },
+          {
+            mather2: "julua",
+            father2: "david",
+            grand2: {
+              grandMa2: "sofia",
+              grandPa2: "Nik",
+            },
+          },
+        ],
+        parenth: {
+          mather: "julua",
+          father: "david",
+          grand: {
+            grandMa: "sofia",
+            grandPa: "Nik",
+          },
+        },
+        secondParenth: {
+          secMather: "ann",
+          secFather: "bob",
+          secGrand: {
+            secGrandMa: "tania",
+            secGrandPa: "robert",
+          },
+          cousine: {
+            sister: "kate",
+            brotehr: "alex",
+          },
+        },
+      };
+      const cloned = cloneDeep(forClone);
+      cloned.arr.push("pushed");
+      cloned.arr[0].grand1.grandMa1 = "newone";
+      debugger;
+      debugger;
+    </script>
+  </body>
+</html>

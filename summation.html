@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      const arr = [5, 10, 15, 20, 25, 30];
+      function sumCombination(arr, sum) {
+        return arr.reduce(
+          (acc, item, _, arr) => {
+            if (sum <= item) {
+              return acc;
+            }
+            const key = item / sum;
+            acc.map[key] = item;
+            const result = acc.map[1 - key];
+            if (result && result !== item) {
+              acc.result.push([result, item]);
+            }
+            return acc;
+          },
+          { map: {}, result: [] }
+        ).result;
+      }
+      const combinations = sumCombination(arr, 40);
+      combinations; // [[15, 25], [10,30]]
+    </script>
+  </body>
+</html>
