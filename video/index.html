@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <input id="file" type="file" />
+    <video width="200" height="100" id="video"></video>
+
+    <script>
+      var video = document.getElementById("video");
+      video.addEventListener("error", () => {
+        console.log("error");
+      });
+
+      document.getElementById("file").addEventListener("change", (inpE) => {
+        // const r = window.URL.createObjectURL(inpE.target.files[0]);
+        // console.log(r);
+
+        // video.src = r;
+        // video.play();
+        var reader = new FileReader();
+        reader.onload = (e) => {
+          video.src = e.target.result;
+          video.play();
+          console.log({ k: video }); // when enough data loads
+        };
+        reader.readAsDataURL(inpE.target.files[0]);
+      });
+
+      //   var mimeCodec = 'video/mp4; codecs="avc1.4D401F"';
+      //   console.log(MediaSource.isTypeSupported(mimeCodec));
+    </script>
+  </body>
+</html>
